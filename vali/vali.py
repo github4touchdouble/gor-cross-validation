@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 VALI_DIR='validation/'
-TRAIN_DIR='crossvalidation/training'
-TEST_DIR='crossvalidation/test'
+TRAIN_DIR='crossvalidation/training/'
+TEST_DIR='crossvalidation/test/'
 MODEL_DIR="models/"
 PREDICTIONS_DIR="predictions/"
 
