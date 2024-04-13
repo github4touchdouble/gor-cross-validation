@@ -4,7 +4,7 @@ validated several types of **GOR**, by calculating `SOV` and `Q3` in each fold.
 The scores get summarized (in `[model]_[run_id]_SUMMARY_plot_ALL.scores`) and plotted in 
 (in `[gor_model]_[id]_SUMMARY_plot_ALL.png`).
 
-> [!Note] You can additionally use this repository to perform redundancy reduction on your `.db` file: https://github.com/github4touchdouble/ncd-seq-similarity
+> [!NOTE] You can additionally use this repository to perform redundancy reduction on your `.db` file: https://github.com/github4touchdouble/ncd-seq-similarity
 
 # Usage
 ```bash
@@ -65,4 +65,4 @@ will result in the following file structure:
 ```
 
 # GOR jars
-> [!Note] The java source code can be found in this repository: https://github.com/github4touchdouble/gor-struct-pred
+> [!NOTE] The java source code can be found in this repository: https://github.com/github4touchdouble/gor-struct-pred
