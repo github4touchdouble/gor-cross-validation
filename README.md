@@ -5,7 +5,7 @@ The scores get summarized (in `[model]_[run_id]_SUMMARY_plot_ALL.scores`) and pl
 (in `[gor_model]_[id]_SUMMARY_plot_ALL.png`).
 
 # Usage
-```py
+```bash
 python3 vali.py --id run_1 --gor 1 3 4 --folds 4 [--ali train/CB513MultipleAlignments/] --db cb513.db [--c]
 ```
 - `--id`: name of validation run
@@ -17,7 +17,7 @@ python3 vali.py --id run_1 --gor 1 3 4 --folds 4 [--ali train/CB513MultipleAlign
 - `--c`: clear previous workspace (deletes all files in `crossvalidation`, `models`, `validation` and `predictions`)
 
 # Example 
-```python
+```bash
 python3 vali.py --id run_example --gor 3 --folds 3 --db cb513.db --c
 ```
 will result in the following file structure:
