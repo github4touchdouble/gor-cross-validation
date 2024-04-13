@@ -197,7 +197,7 @@ def reset_workspace(clear: bool):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Crossvalidat on dataset")
-    parser.add_argument('--gor', type=int, nargs="+", required=False, help="Gor type to crossvalidate on")
+    parser.add_argument('--gor', type=int, nargs="+", required=True, help="Gor type to crossvalidate on")
     parser.add_argument('--id', type=str, required=True, help="Run id for the crossvalidation")
     parser.add_argument('--ali', type=str, required=False, help="Points to MultipleAlignments directory, required for gor 5")
     parser.add_argument('--folds', type=int, required=True, default=None, help="Number of folds for crossvalidation")
@@ -208,7 +208,6 @@ if __name__ == "__main__":
     folds = args.folds
     gor = args.gor
     db = args.db
-    ali = args.ali
     name_of_db = db.split(".")[-2].split("/")[-1]
 
     reset_workspace(args.c)  # reset workspace
@@ -216,4 +215,4 @@ if __name__ == "__main__":
     crossvalidate(folds, run_id, gor, name_of_db)  # gor I III IV
 
     if args.ali:
-        crossvalidate_gor_v(folds, run_id, gor, name_of_db, ali)  # for gor V
+        crossvalidate_gor_v(folds, run_id, gor, name_of_db, args.ali)  # for gor V
