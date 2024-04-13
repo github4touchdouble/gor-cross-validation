@@ -14,7 +14,7 @@ python3 vali.py --id run_1 --gor 1 3 4 --folds 4 [--ali train/CB513MultipleAlign
 - `--ali`: gor V switch (points to a directory with secondary sequence alignments) 
            (currently only works with `cb513.db`)
 - `--db`: path to db file
-- `--c`: clear previous workspace 
+- `--c`: clear previous workspace (deletes all files in `crossvalidation`, `models`, `validation` and `predictions`)
 
 # Example 
 - `--id`: run_example
