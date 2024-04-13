@@ -7,13 +7,13 @@ import argparse
 import os
 from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
 
 VALI_DIR='crossvalidation'
 TRAIN_DIR='crossvalidation/training'
 TEST_DIR='crossvalidation/test'
+MODEL_DIR="models/"
+PREDICTIONS_DIR="predictions/"
 
 
 def plot_summary_per_fold(path_to_summary: str, name_of_db: str):
@@ -47,19 +47,6 @@ def plot_summary_per_fold(path_to_summary: str, name_of_db: str):
 
 
 def create_folds(folds: int, file: str):
-    if not os.path.exists(VALI_DIR):
-        os.mkdir(VALI_DIR)
-    if not os.path.exists(TRAIN_DIR):
-        os.mkdir(TRAIN_DIR)
-    if not os.path.exists(TEST_DIR):
-        os.mkdir(TEST_DIR)
-
-    # clear content of crossvalidation folder
-    # for file in os.listdir(TRAIN_DIR):
-    #     os.remove(f'{TRAIN_DIR}/{file}')
-    # for file in os.listdir(TEST_DIR):
-    #     os.remove(f'{TEST_DIR}/{file}')
-
     # read file and create a list of tuples (pdb_id, sequence, secondary structure)
     seqs = []
     lines = []
@@ -94,61 +81,69 @@ def create_folds(folds: int, file: str):
 
 
 def crossvalidate(folds: int, run_id: str, gor: list, name_of_db: str):
-    for model in gor:
-        paths_of_summary = []
-        for fold in range(1, folds + 1):
-            command = ["java", "-jar", "JARS/trainPredict.jar", 
-                       "--model",  f"models/gor{model}_fold{fold}_{run_id}.mod",
-                       "--seq", f"{TEST_DIR}/fasta_test_{fold}.fasta",
-                       "--format", "txt",
-                       "--db",  f"{TRAIN_DIR}/train_{fold}.db",
-                       "--method", f"gor{model}",
-                       "--modelT", f"models/gor{model}_fold{fold}_{run_id}.mod",
-                       "--out", f"predictions/gor{model}_fold{fold}_{run_id}.prd"]
-            subprocess.run(command, stdout=DEVNULL)
+    with tqdm(gor) as t:
+        for model in t:
+            t.set_description(f'GOR {model}')
+            paths_of_summary = []
+            for fold in tqdm(range(1, folds + 1), desc='Folds'):
+                command = ["java", "-jar", "JARS/trainPredict.jar",
+                           "--model",  f"models/gor{model}_fold{fold}_{run_id}.mod",
+                           "--seq", f"{TEST_DIR}/fasta_test_{fold}.fasta",
+                           "--format", "txt",
+                           "--db",  f"{TRAIN_DIR}/train_{fold}.db",
+                           "--method", f"gor{model}",
+                           "--modelT", f"models/gor{model}_fold{fold}_{run_id}.mod",
+                           "--out", f"predictions/gor{model}_fold{fold}_{run_id}.prd"]
 
-            command = ["java", "-jar", "JARS/evalGor.jar", 
-                       "-p", f"predictions/gor{model}_fold{fold}_{run_id}.prd", 
-                       "-r", f"{TEST_DIR}/test_{fold}.db",
-                       "-s", f"validation/gor{model}_fold{fold}_{run_id}_SUMMARY.txt",
-                       "-d", f"validation/gor{model}_fold{fold}_{run_id}_DETAILED.txt",
-                       "-b"]
-            subprocess.run(command, stdout=DEVNULL)
+                subprocess.run(command, stdout=DEVNULL)
 
-            paths_of_summary.append(f"validation/gor{model}_fold{fold}_{run_id}_SUMMARY_plot.scores")
+                command = ["java", "-jar", "JARS/evalGor.jar",
+                           "-p", f"predictions/gor{model}_fold{fold}_{run_id}.prd",
+                           "-r", f"{TEST_DIR}/test_{fold}.db",
+                           "-s", f"validation/gor{model}_fold{fold}_{run_id}_SUMMARY.txt",
+                           "-d", f"validation/gor{model}_fold{fold}_{run_id}_DETAILED.txt",
+                           "-b"]
 
-        # concatenate all the summary files per model
-        write_summary_to_file(paths_of_summary, name_of_db)
+                subprocess.run(command, stdout=DEVNULL)
 
+                paths_of_summary.append(f"validation/gor{model}_fold{fold}_{run_id}_SUMMARY_plot.scores")
 
-
-def crossvalidate_gor_v(folds: int, run_id: str, gor: list, name_of_db: str):
-    for model in gor:
-        paths_of_summary = []
-        for fold in range(1, folds + 1):
-            command = ["java", "-jar", "JARS/trainPredict.jar", 
-                       "--model",  f"models/gor5_{model}_fold{fold}_{run_id}.mod", 
-                       "--maf", "train/CB513MultipleAlignments/",  # hard coded, we only have that 
-                       "--format", "txt",
-                       "--db",  f"{TRAIN_DIR}/train_{fold}.db",
-                       "--method", f"gor{model}",
-                       "--modelT", f"models/gor5_{model}_fold{fold}_{run_id}.mod",
-                       "--out", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd"]
-            subprocess.run(command, stdout=DEVNULL)
+            # concatenate all the summary files per model
+            write_summary_to_file(paths_of_summary, name_of_db)
 
 
-            command = ["java", "-jar", "JARS/evalGor.jar", 
-                       "-p", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd", 
-                       "-r", f"validation/cb513.db",
-                       "-s", f"validation/gor5_{model}_fold{fold}_{run_id}_SUMMARY.txt",
-                       "-d", f"validation/gor5_{model}_fold{fold}_{run_id}_DETAILED.txt",
-                       "-b"]
-            subprocess.run(command, stdout=DEVNULL)
 
-            paths_of_summary.append(f"validation/gor5_{model}_fold{fold}_{run_id}_SUMMARY_plot.scores")
+def crossvalidate_gor_v(folds: int, run_id: str, gor: list, name_of_db: str, ali: str):
+    with tqdm(gor) as t:
+        for model in t:
+            t.set_description(f'GOR 5-{model}')
+            paths_of_summary = []
 
-        # concatenate all the summary files per model
-        write_summary_to_file(paths_of_summary, name_of_db)
+            for fold in tqdm(range(1, folds + 1), desc='Folds'):
+                command = ["java", "-jar", "JARS/trainPredict.jar",
+                           "--model",  f"models/gor5_{model}_fold{fold}_{run_id}.mod",
+                           "--maf", ali,
+                           "--format", "txt",
+                           "--db",  f"{TRAIN_DIR}/train_{fold}.db",
+                           "--method", f"gor{model}",
+                           "--modelT", f"models/gor5_{model}_fold{fold}_{run_id}.mod",
+                           "--out", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd"]
+
+                subprocess.run(command, stdout=DEVNULL)
+
+                command = ["java", "-jar", "JARS/evalGor.jar",
+                           "-p", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd",
+                           "-r", "cb513.db",
+                           "-s", f"validation/gor5_{model}_fold{fold}_{run_id}_SUMMARY.txt",
+                           "-d", f"validation/gor5_{model}_fold{fold}_{run_id}_DETAILED.txt",
+                           "-b"]
+
+                subprocess.run(command, stdout=DEVNULL)
+
+                paths_of_summary.append(f"validation/gor5_{model}_fold{fold}_{run_id}_SUMMARY_plot.scores")
+
+            # concatenate all the summary files per model
+            write_summary_to_file(paths_of_summary, name_of_db)
 
 
 def write_summary_to_file(paths: list, name_of_db: str):
@@ -173,24 +168,50 @@ def write_summary_to_file(paths: list, name_of_db: str):
     plot_summary_per_fold(summary_out_path, name_of_db)
 
 
+def reset_workspace(clear: bool):
+    # check if dirs exist
+    if not os.path.exists(MODEL_DIR):
+        os.mkdir(MODEL_DIR)
+    if not os.path.exists(PREDICTIONS_DIR):
+        os.mkdir(PREDICTIONS_DIR)
+    if not os.path.exists(VALI_DIR):
+        os.mkdir(VALI_DIR)
+    if not os.path.exists(TRAIN_DIR):
+        os.mkdir(TRAIN_DIR)
+    if not os.path.exists(TEST_DIR):
+        os.mkdir(TEST_DIR)
+
+    if clear:
+        # Clear content of cross-validation folder
+        for filename in os.listdir(TRAIN_DIR):
+            os.remove(os.path.join(TRAIN_DIR, filename))
+        for filename in os.listdir(TEST_DIR):
+            os.remove(os.path.join(TEST_DIR, filename))
+        for filename in os.listdir(PREDICTIONS_DIR):
+            os.remove(os.path.join(PREDICTIONS_DIR, filename))
+        for filename in os.listdir(MODEL_DIR):
+            os.remove(os.path.join(MODEL_DIR, filename))
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Crossvalidat on dataset")
     parser.add_argument('--gor', type=int, nargs="+", required=False, help="Gor type to crossvalidate on")
     parser.add_argument('--id', type=str, required=True, help="Run id for the crossvalidation")
-    parser.add_argument('--ali', action='store_true', required=False, help="Run gor 5 for all gor given in the list")
+    parser.add_argument('--ali', type=str, required=False, help="Points to MultipleAlignments directory, required for gor 5")
     parser.add_argument('--folds', type=int, required=True, default=None, help="Number of folds for crossvalidation")
     parser.add_argument('--db', type=str, required=True, default=None, help="File to split into folds")
+    parser.add_argument('--c', action='store_true', required=False, help="Clear previous workspace")
     args = parser.parse_args()
     run_id = args.id
     folds = args.folds
     gor = args.gor
     db = args.db
+    ali = args.ali
     name_of_db = db.split(".")[-2].split("/")[-1]
 
+    reset_workspace(args.c)  # reset workspace
     create_folds(folds, db)  # create folds
-
     crossvalidate(folds, run_id, gor, name_of_db)  # gor I III IV
 
-    if args.ali: 
-        crossvalidate_gor_v(folds, run_id, gor, name_of_db)  # for gor V
-    
+    if args.ali:
+        crossvalidate_gor_v(folds, run_id, gor, name_of_db, ali)  # for gor V
