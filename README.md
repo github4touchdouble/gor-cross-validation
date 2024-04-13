@@ -3,12 +3,12 @@ A script that automatically creates `n` folds of the provided `.db` file and
 validated several types of **GOR**.
 
 ```py
-vali.py --id run_1 --gor 1 3 4 --folds 4 --ali --db validation/cb513.db
+vali.py --id run_1 --gor 1 3 4 --folds 4 [--ali train/CB513MultipleAlignments/] --db validation/cb513.db
 ```
 - `--id`: name of validation run
 - `--gor`: gor types
 - `--folds`: number of folds
-- `--ali`: gor V switch
+- `--ali`: gor V switch (points to a directory with seqondary sequence alignments)
 - `--db`: path to db file
 
 
@@ -61,4 +61,4 @@ will result in the following file structure
 │  ├── gor3_fold2_run_example.prd
 │  └── gor3_fold3_run_example.prd
 ```
-
+# Gor V
