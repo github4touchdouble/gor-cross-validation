@@ -80,7 +80,7 @@ def create_folds(folds: int, file: str):
                 f.write(line[0] + '\n' + line[1] + '\n')
 
 
-def crossvalidate(folds: int, run_id: str, gor: list, name_of_db: str):
+def crossvalidate(folds: int, run_id: str, gor: list, name_of_db: str, window: str):
     with tqdm(gor) as t:
         for model in t:
             t.set_description(f'GOR {model}')
@@ -93,7 +93,8 @@ def crossvalidate(folds: int, run_id: str, gor: list, name_of_db: str):
                            "--db",  f"{TRAIN_DIR}/train_{fold}.db",
                            "--method", f"gor{model}",
                            "--modelT", f"models/gor{model}_fold{fold}_{run_id}.mod",
-                           "--out", f"predictions/gor{model}_fold{fold}_{run_id}.prd"]
+                           "--out", f"predictions/gor{model}_fold{fold}_{run_id}.prd",
+                           "--w", f"{window}"]
 
                 subprocess.run(command, stdout=DEVNULL)
 
@@ -113,7 +114,7 @@ def crossvalidate(folds: int, run_id: str, gor: list, name_of_db: str):
 
 
 
-def crossvalidate_gor_v(folds: int, run_id: str, gor: list, name_of_db: str, ali: str):
+def crossvalidate_gor_v(folds: int, run_id: str, gor: list, name_of_db: str, ali: str, window: str):
     with tqdm(gor) as t:
         for model in t:
             t.set_description(f'GOR 5-{model}')
@@ -127,7 +128,9 @@ def crossvalidate_gor_v(folds: int, run_id: str, gor: list, name_of_db: str, ali
                            "--db",  f"{TRAIN_DIR}/train_{fold}.db",
                            "--method", f"gor{model}",
                            "--modelT", f"models/gor5_{model}_fold{fold}_{run_id}.mod",
-                           "--out", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd"]
+                           "--out", f"predictions/gor5_{model}_fold{fold}_{run_id}.prd",
+                           "--w", f"{window}"]
+
 
                 subprocess.run(command, stdout=DEVNULL)
 
@@ -203,16 +206,18 @@ if __name__ == "__main__":
     parser.add_argument('--folds', type=int, required=True, default=None, help="Number of folds for crossvalidation")
     parser.add_argument('--db', type=str, required=True, default=None, help="File to split into folds")
     parser.add_argument('--c', action='store_true', required=False, help="Clear previous workspace")
+    parser.add_argument('--w', type=str, required=False, default=17, help="Change search window size")
     args = parser.parse_args()
     run_id = args.id
     folds = args.folds
     gor = args.gor
     db = args.db
+    window_size = args.w
     name_of_db = db.split(".")[-2].split("/")[-1]
 
     reset_workspace(args.c)  # reset workspace
     create_folds(folds, db)  # create folds
-    crossvalidate(folds, run_id, gor, name_of_db)  # gor I III IV
+    crossvalidate(folds, run_id, gor, name_of_db, window_size)  # gor I III IV
 
     if args.ali:
-        crossvalidate_gor_v(folds, run_id, gor, name_of_db, args.ali)  # for gor V
+        crossvalidate_gor_v(folds, run_id, gor, name_of_db, args.ali, window_size)  # for gor V

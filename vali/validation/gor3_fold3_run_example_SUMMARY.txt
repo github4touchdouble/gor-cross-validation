@@ -4,14 +4,14 @@ Statistic for protein validation
 Number of Proteins:           171
 Mean Protein Length:          156.81286549707602
 Sum of Protein Length:        26815
-Sum of Predicted Positions:   24592.0
+Sum of Predicted Positions:   26302.0
 
-q3 :		Mean:	44.8	Dev:	10.6	Min:	14.9	Max:	100.0	Median:	44.0	Quantil_25:	39.1	Quantil_75:	49.2	Quantil_5:	31.1	Quantil_95:	62.3
-qObs_H :		Mean:	48.0	Dev:	22.9	Min:	0.0	Max:	100.0	Median:	51.2	Quantil_25:	35.3	Quantil_75:	63.8	Quantil_5:	0.0	Quantil_95:	80.0
-qObs_E :		Mean:	30.7	Dev:	19.6	Min:	0.0	Max:	100.0	Median:	31.3	Quantil_25:	17.1	Quantil_75:	44.0	Quantil_5:	0.0	Quantil_95:	57.5
-qObs_C :		Mean:	37.9	Dev:	11.8	Min:	0.0	Max:	68.0	Median:	38.2	Quantil_25:	31.9	Quantil_75:	45.3	Quantil_5:	18.2	Quantil_95:	55.6
+q3 :		Mean:	42.5	Dev:	9.6	Min:	19.1	Max:	100.0	Median:	42.4	Quantil_25:	37.8	Quantil_75:	47.3	Quantil_5:	27.8	Quantil_95:	57.4
+qObs_H :		Mean:	46.5	Dev:	19.9	Min:	0.0	Max:	100.0	Median:	50.0	Quantil_25:	37.5	Quantil_75:	58.7	Quantil_5:	0.0	Quantil_95:	73.1
+qObs_E :		Mean:	29.3	Dev:	17.3	Min:	0.0	Max:	100.0	Median:	32.1	Quantil_25:	20.5	Quantil_75:	39.5	Quantil_5:	0.0	Quantil_95:	52.9
+qObs_C :		Mean:	35.6	Dev:	12.3	Min:	0.0	Max:	72.0	Median:	36.8	Quantil_25:	27.9	Quantil_75:	44.2	Quantil_5:	12.1	Quantil_95:	52.9
 
-SOV :		Mean:	31.2	Dev:	9.7	Min:	10.6	Max:	100.0	Median:	30.6	Quantil_25:	25.5	Quantil_75:	35.5	Quantil_5:	17.8	Quantil_95:	47.3
-SOV_H :		Mean:	33.6	Dev:	15.6	Min:	0.0	Max:	100.0	Median:	31.6	Quantil_25:	24.8	Quantil_75:	41.2	Quantil_5:	12.5	Quantil_95:	61.5
-SOV_E :		Mean:	28.6	Dev:	14.8	Min:	0.0	Max:	83.3	Median:	28.2	Quantil_25:	19.2	Quantil_75:	37.3	Quantil_5:	0.0	Quantil_95:	53.8
-SOV_C :		Mean:	29.2	Dev:	10.9	Min:	0.0	Max:	70.0	Median:	28.5	Quantil_25:	22.3	Quantil_75:	35.1	Quantil_5:	13.2	Quantil_95:	50.0
+SOV :		Mean:	29.7	Dev:	8.6	Min:	7.9	Max:	100.0	Median:	29.2	Quantil_25:	25.3	Quantil_75:	32.9	Quantil_5:	19.2	Quantil_95:	41.6
+SOV_H :		Mean:	34.0	Dev:	15.2	Min:	6.2	Max:	100.0	Median:	29.8	Quantil_25:	24.7	Quantil_75:	39.7	Quantil_5:	15.6	Quantil_95:	65.0
+SOV_E :		Mean:	28.0	Dev:	14.9	Min:	0.0	Max:	100.0	Median:	29.3	Quantil_25:	20.6	Quantil_75:	36.0	Quantil_5:	0.0	Quantil_95:	48.4
+SOV_C :		Mean:	27.3	Dev:	9.8	Min:	0.0	Max:	69.1	Median:	26.3	Quantil_25:	20.9	Quantil_75:	33.0	Quantil_5:	12.5	Quantil_95:	41.0
