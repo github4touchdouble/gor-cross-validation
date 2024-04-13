@@ -9,7 +9,7 @@ from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 import pandas as pd
 
-VALI_DIR='crossvalidation'
+VALI_DIR='validation/'
 TRAIN_DIR='crossvalidation/training'
 TEST_DIR='crossvalidation/test'
 MODEL_DIR="models/"
@@ -191,6 +191,8 @@ def reset_workspace(clear: bool):
             os.remove(os.path.join(PREDICTIONS_DIR, filename))
         for filename in os.listdir(MODEL_DIR):
             os.remove(os.path.join(MODEL_DIR, filename))
+        for filename in os.listdir(VALI_DIR):
+            os.remove(os.path.join(VALI_DIR, filename))
 
 
 if __name__ == "__main__":
