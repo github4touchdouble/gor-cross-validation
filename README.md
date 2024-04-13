@@ -61,4 +61,6 @@ will result in the following file structure:
 │  └── gor3_fold3_run_example.prd
 ```
 
+# GOR jars
 
+The java source code can be found in this repository: https://github.com/github4touchdouble/gor-struct-pred
